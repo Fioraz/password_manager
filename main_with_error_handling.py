@@ -42,19 +42,24 @@ def save():
     else:
         can_save = messagebox.askokcancel(title=website, message="Save Password?")
         if can_save:
-            with open("data.json", "r") as data_file:
-                # Reading available data
-                data = json.load(data_file)
+            try:
+                with open("data.json", "r") as data_file:
+                    # Reading available data
+                    data = json.load(data_file)
+            except FileNotFoundError:
+                with open("data.json", "w") as data_file:
+                    json.dump(data_dict, data_file, indent=4)
+            else:
                 # Updating available data with new data
                 data.update(data_dict)
 
-            with open("data.json", "w") as data_file:
-                # Saving new data
-                json.dump(data, data_file, indent=4)
-
-            textbox_web.delete(0, END)
-            textbox_email.delete(0, END)
-            textbox_pwd.delete(0, END)
+                with open("data.json", "w") as data_file:
+                    # Saving new data
+                    json.dump(data_dict, data_file, indent=4)
+            finally:
+                textbox_web.delete(0, END)
+                textbox_email.delete(0, END)
+                textbox_pwd.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
